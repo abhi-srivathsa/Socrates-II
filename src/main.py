@@ -3,6 +3,8 @@ import markovify
 import openai
 import pandas as pd
 from decouple import config
+import re
+import random
 
 openai.api_key = config('openai.api_key')
 TOKEN = config('TOKEN')
@@ -120,11 +122,21 @@ async def on_message(message):
         elif user_message.lower() == 'word please':
             model_m = markovify.Text(text_m,state_size=2)
             model_w = markovify.Text(text_w,state_size=1)
-            word = model_w.make_sentence()[0:12]
+
+            # removing white spaces and periods
+            text2 = re.sub(r"\s+", "", text_w)
+            text3 = re.sub(r"[\.]", "", text2)
+             # getting a random starting letter
+            starting = random.choice(text3)
+
+            # generating a word with the random starting letter
+            word = model_w.make_sentence_with_start(starting)[0:12]
             meaning = model_m.make_sentence()
+            word2 = re.sub(r"\s+", "", word)
+            word3 = re.sub(r"[\.]", "", word2)
 
             while(word in word_list or not word):
-                word = model_w.make_sentence()[0:12]
+                word = model_w.make_sentence_with_start(starting)()[0:12]
             word_list.append(word)
 
             while(meaning in meaning_list or not meaning):
@@ -134,7 +146,7 @@ async def on_message(message):
 
 
 
-            await message.channel.send(f'The new word I created is :   {word}\nAnd it means :   {meaning}')
+            await message.channel.send(f'The new word I created is :   {word3}\nAnd it means :   {meaning}')
 
             return
 
