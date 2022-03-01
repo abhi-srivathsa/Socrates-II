@@ -71,11 +71,21 @@ async def on_message(message):
                 frequency_penalty=0.0,
                 presence_penalty=0.0
             )
+            response3 = openai.Completion.create(
+                engine="text-davinci-001",
+                prompt="Create an analogy for this phrase:\n\n" + response['choices'][0]['text'],
+                temperature=0.5,
+                max_tokens=60,
+                top_p=1.0,
+                frequency_penalty=0.0,
+                presence_penalty=0.0
+            )
 
             await  message.channel.send("Here's an interesting thought")
             await message.channel.send(response['choices'][0]['text'])
             await message.channel.send(f'Let me further explain what I am talking about')
             await message.channel.send(response2['choices'][0]['text'])
+            await message.channel.send(response3['choices'][0]['text'])
 
             return
 
