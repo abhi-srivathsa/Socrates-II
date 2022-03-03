@@ -13,15 +13,18 @@ TOKEN = config('TOKEN')
 filename_m = "meanings.txt"
 filename_w = "words.txt"
 filename_q = "question.txt"
+filename_s = "socratesQuotes.txt"
 input = pd.read_csv('philosophy_data.csv')
 
 file_m = open(filename_m)
 file_w = open(filename_w)
 file_q = open(filename_q)
+file_s = open(filename_s)
 
 text_m = file_m.read()
 text_w = file_w.read()
 text_q = file_q.read()
+text_s = file_s.read()
 
 word_list = ['word']
 meaning_list = ['meaning']
@@ -143,11 +146,13 @@ async def on_message(message):
                 meaning = model_m.make_sentence()
 
             meaning_list.append(meaning)
-
-
-
             await message.channel.send(f'The new word I created is :   {word3}\nAnd it means :   {meaning}')
+            return
 
+        elif user_message.lower() == 'socrates':
+            model_s = markovify.Text(text_s,state_size=2)
+            socratesThought = model_s.make_sentence()
+            await message.channel.send(f'Socrates thoughts : {socratesThought}')
             return
 
         elif user_message.lower() == 'bye':
