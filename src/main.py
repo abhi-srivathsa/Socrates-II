@@ -6,6 +6,7 @@ from decouple import config
 import re
 import random
 
+
 openai.api_key = config('openai.api_key')
 TOKEN = config('TOKEN')
 
@@ -16,22 +17,24 @@ filename_q = "question.txt"
 filename_s = "socratesQuotes.txt"
 input = pd.read_csv('philosophy_data.csv')
 
+#opening the txt files
 file_m = open(filename_m)
 file_w = open(filename_w)
 file_q = open(filename_q)
 file_s = open(filename_s)
 
+#reading the txt files
 text_m = file_m.read()
 text_w = file_w.read()
 text_q = file_q.read()
 text_s = file_s.read()
 
+#maintaining unique word and meaning list to ensure no duplication occurs during any session
 word_list = ['word']
 meaning_list = ['meaning']
 
 #connecting to Discord
 client = discord.Client()
-
 
 #Event to come online
 @client.event
@@ -153,7 +156,28 @@ async def on_message(message):
         elif 'thought' in user_message.lower():
             model_s = markovify.Text(text_s,state_size=2)
             socratesThought = model_s.make_sentence()
-            await message.channel.send(f'One of the intersting thoughts I had after understanding human philosophy is \n\n {socratesThought}')
+            response = openai.Completion.create(
+                engine="text-davinci-001",
+                prompt="Correct this to standard English:\n\n" + socratesThought,
+                temperature=0,
+                max_tokens=60,
+                top_p=1.0,
+                frequency_penalty=0.0,
+                presence_penalty=0.0
+            )
+            response2 = openai.Completion.create(
+                engine="text-davinci-001",
+                prompt="Summarize this for a second-grade student:\n\n" + response['choices'][0]['text'],
+                temperature=0.7,
+                max_tokens=64,
+                top_p=1.0,
+                frequency_penalty=0.0,
+                presence_penalty=0.0
+            )
+            await  message.channel.send("Here's an interesting thought :: ")
+            await message.channel.send(response['choices'][0]['text'])
+            await message.channel.send(f'Let me further explain what I am talking about')
+            await message.channel.send(response2['choices'][0]['text'])
             return
 
         elif user_message.lower() == 'bye':
