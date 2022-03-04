@@ -110,18 +110,29 @@ async def on_message(message):
                 frequency_penalty=0.0,
                 presence_penalty=0.0
             )
+
+
             response2 = openai.Completion.create(
                 engine="text-davinci-001",
-                prompt="Create an analogy for this phrase:\n\n" + response['choices'][0]['text'],
-                temperature=0.5,
-                max_tokens=60,
-                top_p=1,
-                frequency_penalty=0,
-                presence_penalty=0
+                prompt="Summarize this for a second-grade student:\n\n" + response['choices'][0]['text'],
+                temperature=0.7,
+                max_tokens=64,
+                top_p=1.0,
+                frequency_penalty=0.0,
+                presence_penalty=0.0
             )
 
-            await message.channel.send(f'Here is a compelling question \n')
-            await message.channel.send(response['choices'][0]['text'])
+           # response2 = openai.Completion.create(
+            #    engine="text-davinci-001",
+            #   prompt="Create an analogy for this phrase:\n\n" + response['choices'][0]['text'],
+             #   temperature=0.5,
+              #  max_tokens=60,
+               # top_p=1,
+                #frequency_penalty=0,
+                #presence_penalty=0
+            #)
+
+            await message.channel.send(f'Here is a compelling question \n'+"**"+response['choices'][0]['text']+"**")
             await message.channel.send(f'\n\nLet me further explain what I am talking about\n')
             await message.channel.send(response2['choices'][0]['text'])
             return
