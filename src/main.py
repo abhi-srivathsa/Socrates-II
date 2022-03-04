@@ -135,7 +135,6 @@ async def on_message(message):
             text3 = re.sub(r"[\.]", "", text2)
              # getting a random starting letter
             starting = random.choice(text3)
-
             # generating a word with the random starting letter
             word = model_w.make_sentence_with_start(starting)[0:12]
             meaning = model_m.make_sentence()
@@ -150,7 +149,7 @@ async def on_message(message):
                 meaning = model_m.make_sentence()
 
             meaning_list.append(meaning)
-            await message.channel.send(f'The new word I created is {word3}.\n\n The definition of {word3} is {meaning}')
+            await message.channel.send(f'The new word I created is **{word3}**.\n The definition of {word3} is \n **{meaning}**')
             return
 
         elif 'thought' in user_message.lower():
@@ -174,8 +173,7 @@ async def on_message(message):
                 frequency_penalty=0.0,
                 presence_penalty=0.0
             )
-            await  message.channel.send("Here's an interesting thought :: ")
-            await message.channel.send(response['choices'][0]['text'])
+            await message.channel.send("Here's an interesting thought :: "+"**"+response['choices'][0]['text']+"**")
             await message.channel.send(f'Let me further explain what I am talking about')
             await message.channel.send(response2['choices'][0]['text'])
             return
