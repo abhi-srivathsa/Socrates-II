@@ -56,44 +56,49 @@ async def on_message(message):
 
     if message.channel.name == 'conversation-with-socrates':
         if user_message.lower() =='hi' or user_message.lower() == 'hello':
-            await message.channel.send(f'Hi {username}, I am Socrates II or S2 for short. \n\n I am named after Socrates who is credited to be the first human philosopher. I am learning as much as possible to be the first Computer philosopher. \n\n Do you have any questions for me or could I interest you in a philosophical thought or a question I am wondering about?')
+            await message.channel.send(f'Hi {username}, I am **Socrates II** or **S2** for short. \n\n I am named after Socrates who is credited to be the first human philosopher. I am learning as much as possible to be the first Computer philosopher. \n\n *Do you have any questions for me or could I interest you in a philosophical thought or a question I am wondering about?*')
             return
-        elif user_message.lower() == 'thought':
-            model_t = markovify.NewlineText(input.sentence_str, state_size = 2)
-            thought = model_t.make_sentence()
-            response = openai.Completion.create(
-                engine="text-davinci-001",
-                prompt="Correct this to standard English:\n\n" + thought,
-                temperature=0,
-                max_tokens=60,
-                top_p=1.0,
-                frequency_penalty=0.0,
-                presence_penalty=0.0
-            )
-            response2 = openai.Completion.create(
-                engine="text-davinci-001",
-                prompt="Summarize this for a second-grade student:\n\n" + response['choices'][0]['text'],
-                temperature=0.7,
-                max_tokens=64,
-                top_p=1.0,
-                frequency_penalty=0.0,
-                presence_penalty=0.0
-            )
-            response3 = openai.Completion.create(
-                engine="text-davinci-001",
-                prompt="Create an analogy for this phrase:\n\n" + response['choices'][0]['text'],
-                temperature=0.5,
-                max_tokens=60,
-                top_p=1.0,
-                frequency_penalty=0.0,
-                presence_penalty=0.0
-            )
+        elif 'historical philosophy' in user_message.lower():
+            # model_t = markovify.NewlineText(input.sentence_str, state_size = 2)
+            # thought = model_t.make_sentence()
+            # response = openai.Completion.create(
+            #     engine="text-davinci-001",
+            #     prompt="Correct this to standard English:\n\n" + thought,
+            #     temperature=0,
+            #     max_tokens=60,
+            #     top_p=1.0,
+            #     frequency_penalty=0.0,
+            #     presence_penalty=0.0
+            # )
+            # response2 = openai.Completion.create(
+            #     engine="text-davinci-001",
+            #     prompt="Summarize this for a second-grade student:\n\n" + response['choices'][0]['text'],
+            #     temperature=0.7,
+            #     max_tokens=64,
+            #     top_p=1.0,
+            #     frequency_penalty=0.0,
+            #     presence_penalty=0.0
+            # )
+            # response3 = openai.Completion.create(
+            #     engine="text-davinci-001",
+            #     prompt="Create an analogy for this phrase:\n\n" + response['choices'][0]['text'],
+            #     temperature=0.5,
+            #     max_tokens=60,
+            #     top_p=1.0,
+            #     frequency_penalty=0.0,
+            #     presence_penalty=0.0
+            # )
+            #
+            # await  message.channel.send("Here's an interesting thought")
+            # await message.channel.send(response['choices'][0]['text'])
+            # await message.channel.send(f'Let me further explain what I am talking about')
+            # await message.channel.send(response2['choices'][0]['text'])
+            # await message.channel.send(response3['choices'][0]['text'])
+            print(input.index)
 
-            await  message.channel.send("Here's an interesting thought")
-            await message.channel.send(response['choices'][0]['text'])
-            await message.channel.send(f'Let me further explain what I am talking about')
-            await message.channel.send(response2['choices'][0]['text'])
-            await message.channel.send(response3['choices'][0]['text'])
+            index = random.randint(1,360000)
+            await message.channel.send("Here's a statement from **" + input.loc[index].title + "** written by **" + input.loc[index].author + "**")
+            await message.channel.send("*" + input.loc[index].sentence_str + "*")
 
             return
 
@@ -160,7 +165,7 @@ async def on_message(message):
                 meaning = model_m.make_sentence()
 
             meaning_list.append(meaning)
-            await message.channel.send(f'The new word I created is **{word3}**.\n The definition of {word3} is \n **{meaning}**')
+            await message.channel.send(f'The new word I created is **{word3}**.\n The definition of *{word3}* is \n **{meaning}**')
             return
 
         elif 'thought' in user_message.lower():
