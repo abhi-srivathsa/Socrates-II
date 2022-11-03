@@ -34,7 +34,9 @@ word_list = ['word']
 meaning_list = ['meaning']
 
 #connecting to Discord
-client = discord.Client()
+intents = discord.Intents.all()
+
+client = discord.Client(intents=intents)
 
 #Event to come online
 @client.event

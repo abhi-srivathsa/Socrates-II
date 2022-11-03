@@ -1,3 +1,5 @@
 .env
 philosophy_data.txt
 philosophy_data.csv 
+.DS_Store
+venv/.DS_Store
