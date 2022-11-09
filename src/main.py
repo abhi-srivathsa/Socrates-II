@@ -15,7 +15,7 @@ filename_m = "meanings.txt"
 filename_w = "words.txt"
 filename_q = "question.txt"
 filename_s = "socratesQuotes.txt"
-input = pd.read_csv('philosophy_data.csv')
+#input = pd.read_csv('philosophy_data.csv')
 
 #opening the txt files
 file_m = open(filename_m)
@@ -96,11 +96,11 @@ async def on_message(message):
             # await message.channel.send(f'Let me further explain what I am talking about')
             # await message.channel.send(response2['choices'][0]['text'])
             # await message.channel.send(response3['choices'][0]['text'])
-            print(input.index)
+            #print(input.index)
 
-            index = random.randint(1,360000)
-            await message.channel.send("Here's a statement from **" + input.loc[index].title + "** written by **" + input.loc[index].author + "**")
-            await message.channel.send("*" + input.loc[index].sentence_str + "*")
+            #index = random.randint(1,360000)
+            #await message.channel.send("Here's a statement from **" + input.loc[index].title + "** written by **" + input.loc[index].author + "**")
+            #await message.channel.send("*" + input.loc[index].sentence_str + "*")
 
             return
 
@@ -128,16 +128,6 @@ async def on_message(message):
                 frequency_penalty=0.0,
                 presence_penalty=0.0
             )
-
-           # response2 = openai.Completion.create(
-            #    engine="text-davinci-001",
-            #   prompt="Create an analogy for this phrase:\n\n" + response['choices'][0]['text'],
-             #   temperature=0.5,
-              #  max_tokens=60,
-               # top_p=1,
-                #frequency_penalty=0,
-                #presence_penalty=0
-            #)
 
             await message.channel.send(f'Here is a compelling question \n'+"**"+response['choices'][0]['text']+"**")
             await message.channel.send(f'\n\nLet me further explain what I am talking about\n')
@@ -204,14 +194,13 @@ async def on_message(message):
             start_sequence = "\nA: "
             restart_sequence = "\n\nQ: "
             response = openai.Completion.create(
-                engine="text-davinci-001",
+                model="text-davinci-002",
                 prompt=restart_sequence + user_message + start_sequence,
-                temperature=0,
-                max_tokens=100,
+                temperature=0.7,
+                max_tokens=256,
                 top_p=1,
-                frequency_penalty=0.0,
-                presence_penalty=0.0,
-                stop=["\t"]
+                frequency_penalty=0,
+                presence_penalty=0
             )
             if response['choices'][0]['text'] != '':
                 await message.channel.send(response['choices'][0]['text'])
